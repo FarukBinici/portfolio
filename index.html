@@ -565,10 +565,12 @@
 </section>
 
 <footer>
-    <p>© 2025 Ad Soyad | Eğitim & Teknoloji | Tüm Hakları Saklıdır</p>
+    <p>© <span id="date"></span> Faruk Binici | Eğitim & Teknoloji | Tüm Hakları Saklıdır</p>
 </footer>
 
 <script>
+    const date = document.getElementById("date");
+    date.innerHTML = new Date().getFullYear();
     // Particle Animation
     const particlesContainer = document.getElementById('particles');
     for (let i = 0; i < 50; i++) {
