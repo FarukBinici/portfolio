@@ -1,11 +1,609 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <title>Öğretmen Portfolyo | Ad Soyad</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Particle Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 40px;
+        }
+
+        nav a {
+            color: #0ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #0ff;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.3), transparent);
+            border-radius: 50%;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #0ff, #f0f, #0ff);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s infinite;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: #0ff;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .cta {
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            color: #0ff;
+            border: 2px solid #0ff;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #0ff;
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .cta-btn:hover {
+            color: #000;
+        }
+
+        .cta-btn:hover::before {
+            left: 0;
+        }
+
+        /* Content Sections */
+        section {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 40px;
+        }
+
+        .section-title {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #0ff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #0ff, transparent);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(0, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #0ff;
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .card h3 {
+            font-size: 24px;
+            color: #0ff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .card p {
+            color: #aaa;
+            line-height: 1.8;
+        }
+
+        /* Skills */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .skill-tag {
+            padding: 15px 30px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #0ff;
+            border-radius: 30px;
+            color: #0ff;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            background: #0ff;
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        /* Projects Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, #0ff, transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 40px 0;
+            padding: 20px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            text-align: right;
+            padding-right: calc(50% + 40px);
+        }
+
+        .timeline-item:nth-child(even) {
+            text-align: left;
+            padding-left: calc(50% + 40px);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #0ff;
+            border: 4px solid #000;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #0ff;
+        }
+
+        .timeline-content {
+            background: rgba(0, 255, 255, 0.05);
+            padding: 30px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .timeline-content h3 {
+            color: #0ff;
+            margin-bottom: 10px;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .contact-item .icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item a {
+            color: #0ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: #f0f;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            color: #666;
+            margin-top: 100px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            nav ul {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                text-align: left;
+                padding-left: 60px;
+                padding-right: 20px;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <p>Faruk Binici</p>
+
+<div class="particles" id="particles"></div>
+
+<nav>
+    <ul>
+        <li><a href="#home">Ana Sayfa</a></li>
+        <li><a href="#about">Hakkımda</a></li>
+        <li><a href="#skills">Yetenekler</a></li>
+        <li><a href="#projects">Projeler</a></li>
+        <li><a href="#contact">İletişim</a></li>
+    </ul>
+</nav>
+
+<div class="hero" id="home">
+    <h1>Faruk BİNİCİ</h1>
+    <p>Matematik & Yazılım Öğretmeni | AI & Data Science</p>
+    <div class="cta">
+        <a href="#contact" class="cta-btn">İletişime Geç</a>
+    </div>
+</div>
+
+<section id="about">
+    <h2 class="section-title">Hakkımda</h2>
+    <div class="cards-grid">
+        <div class="card">
+            <h3>🎓 Eğitim</h3>
+            <p>Matematik ve yazılım alanında uzmanlaşmış, öğrencilere analitik düşünme ve problem çözme becerileri kazandıran deneyimli bir eğitimci.</p>
+        </div>
+        <div class="card">
+            <h3>💡 Vizyon</h3>
+            <p>Teknoloji ve eğitimi birleştirerek, geleceğin yenilikçi düşünürlerini yetiştirmek ve onlara dijital çağda başarılı olmaları için gereken araçları sunmak.</p>
+        </div>
+        <div class="card">
+            <h3>🚀 Misyon</h3>
+            <p>Robotik, kodlama, veri bilimi ve yapay zeka alanlarında kapsamlı eğitimler hazırlayarak öğrencilerin potansiyellerini maksimize etmek.</p>
+        </div>
+    </div>
+</section>
+
+<section id="skills">
+    <h2 class="section-title">Uzmanlık Alanları</h2>
+    <div class="skills-container">
+        <div class="skill-tag">Matematik (Ortaokul - Lise - Üniversite)</div>
+        <div class="skill-tag">Python</div>
+        <div class="skill-tag">C#</div>
+        <div class="skill-tag">Veri Bilimi</div>
+        <div class="skill-tag">Yapay Zeka</div>
+        <div class="skill-tag">Machine Learning</div>
+        <div class="skill-tag">Robotik & Kodlama</div>
+        <div class="skill-tag">Unity & Oyun Geliştirme</div>
+        <div class="skill-tag">Arduino</div>
+        <div class="skill-tag">Data Analytics</div>
+    </div>
+</section>
+
+<section id="projects">
+    <h2 class="section-title">Dersler & Projeler</h2>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>📚 LGS - YKS Matematik Özel Dersleri</h3>
+                <p>Sınav odaklı, kişiselleştirilmiş matematik eğitimi ile öğrencilerin hedeflerine ulaşmaları için kapsamlı destek.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>🐍 Python ile Veri Analizi</h3>
+                <p>Pandas, NumPy, Matplotlib kullanarak gerçek dünya veri setleri üzerinde analiz yapma becerisi kazandırma.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>💻 C# ile Nesne Yönelimli Programlama</h3>
+                <p>Sıfırdan ileri seviyeye C# ile yazılım geliştirme ve OOP prensipleri öğretimi.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>🎮 Unity ile Oyun Geliştirme</h3>
+                <p>2D ve 3D oyun projileri geliştirerek Unity game engine'i öğrenme.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>🤖 Robotik ve Arduino Projeleri</h3>
+                <p>Fiziksel hesaplama, sensörler ve aktuatörler kullanarak robotik sistemler tasarlama.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <h2 class="section-title">İletişim</h2>
+    <div class="contact-grid">
+        <div class="contact-item">
+            <div class="icon">📧</div>
+            <a href="mailto:email@example.com">Email Gönder</a>
+        </div>
+        <div class="contact-item">
+            <div class="icon">🔗</div>
+            <a href="#" target="_blank">LinkedIn</a>
+        </div>
+        <div class="contact-item">
+            <div class="icon">▶</div>
+            <a href="#" target="_blank">YouTube</a>
+        </div>
+        <div class="contact-item">
+            <div class="icon">💼</div>
+            <a href="#" target="_blank">GitHub</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 Ad Soyad | Eğitim & Teknoloji | Tüm Hakları Saklıdır</p>
+</footer>
+
+<script>
+    // Particle Animation
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particlesContainer.appendChild(particle);
+    }
+
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Skill tags interaction
+    document.querySelectorAll('.skill-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            this.style.animation = 'none';
+            setTimeout(() => {
+                this.style.animation = '';
+            }, 10);
+        });
+    });
+</script>
+
 </body>
 </html>
